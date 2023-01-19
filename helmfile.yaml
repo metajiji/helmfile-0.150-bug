@@ -2,12 +2,6 @@
 repositories:
   - name: incubator
     url: https://charts.helm.sh/incubator
-
-environments:
-  {{ .Environment.Name }}:
-    values:
-      - environments/common_values.yaml
-      - environments/{{ .Environment.Name }}/values.yaml
 ---
 templates:
   default: &default_chart_conf
