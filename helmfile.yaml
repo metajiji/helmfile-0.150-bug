@@ -1,0 +1,29 @@
+---
+repositories:
+  - name: incubator
+    url: https://charts.helm.sh/incubator
+
+environments:
+  {{ .Environment.Name }}:
+    values:
+      - environments/common_values.yaml
+      - environments/{{ .Environment.Name }}/values.yaml
+---
+templates:
+  default: &default_chart_conf
+    namespace: {{ .Namespace }}
+    missingFileHandler: Error
+    values:
+      - values/{{`{{ .Release.Name }}`}}.yaml.gotmpl
+  app: &app_chart_conf
+    <<: *default_chart_conf
+    chart: incubator/raw
+    version: 0.2.5
+    values:
+      - values/{{`{{ .Release.Name }}`}}.yaml.gotmpl
+      - imagePullSecrets:
+          - name: regcred
+
+releases:
+  - name: app1
+    <<: *app_chart_conf
